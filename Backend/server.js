@@ -16,10 +16,12 @@ app.use(cors({
 // Routes
 const authRoutes = require("./routes/auth");
 const otpRoutes = require("./routes/otpRoutes");
+const userroutes = require('./routes/user')
 
 // Mount routes
 app.use("/api", authRoutes);
 app.use("/api2", otpRoutes);
+app.use('/api3/users',userroutes)
 
 // Global Error Handler
 app.use((err, req, res, next) => {
