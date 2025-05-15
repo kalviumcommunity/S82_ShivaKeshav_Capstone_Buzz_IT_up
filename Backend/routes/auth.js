@@ -70,3 +70,4 @@ router.get("/me", isAuthenticated, async (req, res) => {
 module.exports = router;
 
 //i have done post and get for my capstone
+//i havve done database read and write in this project
