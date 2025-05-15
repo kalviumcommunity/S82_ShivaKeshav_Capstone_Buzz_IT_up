@@ -39,3 +39,4 @@ router.post("/verify-otp", (req, res) => {
 });
 
 module.exports = router;
+// i have done send opt and verify otp
