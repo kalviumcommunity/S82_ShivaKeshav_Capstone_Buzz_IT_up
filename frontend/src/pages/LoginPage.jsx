@@ -4,29 +4,29 @@ import axios from "axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const SignupPage = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleSignup = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/signup", {
+      const response = await axios.post("http://localhost:5000/api/login", {
         email,
         password,
       });
 
-      console.log("Signup successful:", response.data);
-      // Redirect to OTP verification or login page
-      navigate("/otp");
+      console.log("Login successful:", response.data);
+      // Save the token if required
+      localStorage.setItem("token", response.data.token);
+      navigate("/"); // Redirect to the home page or dashboard
     } catch (err) {
-      console.error("Signup error:", err);
+      console.error("Login error:", err);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -37,16 +37,9 @@ const SignupPage = () => {
     <div>
       <Header />
       <main className="container mx-auto p-4 max-w-md">
-        <h2 className="text-3xl font-bold mb-6">Sign Up</h2>
+        <h2 className="text-3xl font-bold mb-6">Login</h2>
         {error && <p className="text-red-500">{error}</p>}
         <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
           <input
             type="email"
             placeholder="Email"
@@ -62,11 +55,11 @@ const SignupPage = () => {
             className="w-full p-2 border border-gray-300 rounded"
           />
           <button
-            onClick={handleSignup}
+            onClick={handleLogin}
             className={`w-full p-2 bg-blue-500 text-white rounded ${loading ? "opacity-50" : ""}`}
             disabled={loading}
           >
-            {loading ? "Signing Up..." : "Sign Up"}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </div>
       </main>
@@ -75,4 +68,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default LoginPage;

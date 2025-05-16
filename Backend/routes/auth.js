@@ -5,6 +5,7 @@ const sendToken = require("../utils/jwtToken");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { isAuthenticated } = require("../middleware/auth");
 
+
 const router = express.Router();
 
 // Signup
@@ -59,15 +60,47 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-// Get user profile
-router.get("/me", isAuthenticated, async (req, res) => {
-  res.status(200).json({
-    success: true,
-    user: req.user,
-  });
+
+// Get logged-in user details
+router.get("/login", isAuthenticated, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    next(new ErrorHandler(error.message, 500));
+  }
 });
 
+
+
+// Get all users
+router.get("/signup", async (req, res, next) => {
+  try {
+    const users = await User.find().select("-password"); // Exclude passwords
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      users,
+    });
+  } catch (error) {
+    next(new ErrorHandler(error.message, 500));
+  }
+});
+
+
+
+
 module.exports = router;
+
+
+
 
 //i have done post and get for my capstone
 //i havve done database read and write in this project
