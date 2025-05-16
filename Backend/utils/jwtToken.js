@@ -17,3 +17,4 @@ const sendToken = (user, statusCode, res) => {
 };    
 
 module.exports = sendToken;
+//I have done jwt's token
